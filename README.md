@@ -6,6 +6,8 @@ pip install msgpack-rpc-python
 
 pip install airsim
 
+pip install opencv-python
+
 python hello_car.py
 ```
 

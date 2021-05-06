@@ -1,5 +1,6 @@
 '''
-Adapted from https://github.com/microsoft/AirSim/blob/master/PythonClient/car/hello_car.py
+Adapted from
+https://github.com/microsoft/AirSim/blob/master/PythonClient/car/hello_car.py
 
 MIT License
 '''
@@ -11,9 +12,11 @@ import time
 import tempfile
 from sys import stdout
 
+
 def debug(message):
     print(message)
     stdout.flush()
+
 
 def main():
 
@@ -25,7 +28,9 @@ def main():
     car_controls = airsim.CarControls()
 
     tmp_dir = os.path.join(tempfile.gettempdir(), "airsim_car")
-    debug ("Saving images to %s" % tmp_dir)
+
+    debug("Saving images to %s" % tmp_dir)
+
     try:
         os.makedirs(tmp_dir)
     except OSError:
@@ -59,7 +64,7 @@ def main():
         client.setCarControls(car_controls)
         debug("Go reverse, steer right")
         time.sleep(3)   # let car drive a bit
-        car_controls.is_manual_gear = False # change back gear to auto
+        car_controls.is_manual_gear = False  # change back gear to auto
         car_controls.manual_gear = 0
 
         # apply brakes
@@ -67,34 +72,57 @@ def main():
         client.setCarControls(car_controls)
         debug("Apply brakes")
         time.sleep(3)   # let car drive a bit
-        car_controls.brake = 0 #remove brake
+        car_controls.brake = 0  # remove brake
 
         # get camera images from the car
         responses = client.simGetImages([
-            airsim.ImageRequest("0", airsim.ImageType.DepthVis),  #depth visualization image
-            airsim.ImageRequest("1", airsim.ImageType.DepthPerspective, True), #depth in perspective projection
-            airsim.ImageRequest("1", airsim.ImageType.Scene), #scene vision image in png format
-            airsim.ImageRequest("1", airsim.ImageType.Scene, False, False)])  #scene vision image in uncompressed RGB array
+
+            # depth visualization image
+            airsim.ImageRequest("0", airsim.ImageType.DepthVis),
+
+            # depth in perspective projection
+            airsim.ImageRequest("1", airsim.ImageType.DepthPerspective, True),
+
+            # scene vision image in png format
+            airsim.ImageRequest("1", airsim.ImageType.Scene),
+
+            # scene vision image in uncompressed RGB array
+            airsim.ImageRequest("1", airsim.ImageType.Scene, False, False)])
+
         debug('Retrieved images: %d' % len(responses))
 
         for response_idx, response in enumerate(responses):
-            filename = os.path.join(tmp_dir, f"{idx}_{response.image_type}_{response_idx}")
+            fmt = f"{idx}_{response.image_type}_{response_idx}"
+            filename = os.path.join(tmp_dir, fmt)
 
             if response.pixels_as_float:
-                debug("Type %d, size %d" % (response.image_type, len(response.image_data_float)))
-                airsim.write_pfm(os.path.normpath(filename + '.pfm'), airsim.get_pfm_array(response))
-            elif response.compress: #png format
-                debug("Type %d, size %d" % (response.image_type, len(response.image_data_uint8)))
-                airsim.write_file(os.path.normpath(filename + '.png'), response.image_data_uint8)
-            else: #uncompressed array
-                debug("Type %d, size %d" % (response.image_type, len(response.image_data_uint8)))
-                img1d = np.fromstring(response.image_data_uint8, dtype=np.uint8) # get numpy array
-                img_rgb = img1d.reshape(response.height, response.width, 3) # reshape array to 3 channel image array H X W X 3
-                cv2.imwrite(os.path.normpath(filename + '.png'), img_rgb) # write to png
+                debug("Type %d, size %d" % (response.image_type,
+                      len(response.image_data_float)))
+                airsim.write_pfm(os.path.normpath(filename + '.pfm'),
+                                 airsim.get_pfm_array(response))
+            elif response.compress:  # png format
+                debug("Type %d, size %d" %
+                      (response.image_type, len(response.image_data_uint8)))
+                airsim.write_file(os.path.normpath(filename + '.png'),
+                                  response.image_data_uint8)
+            else:  # uncompressed array
+                debug("Type %d, size %d" %
+                      (response.image_type, len(response.image_data_uint8)))
 
-    #restore to original state
+                # get numpy array
+                img1d = np.fromstring(response.image_data_uint8,
+                                      dtype=np.uint8)
+
+                # reshape array to 3 channel image array H X W X 3
+                img_rgb = img1d.reshape(response.height, response.width, 3)
+
+                # write to png
+                cv2.imwrite(os.path.normpath(filename + '.png'), img_rgb)
+
+    # restore to original state
     client.reset()
 
     client.enableApiControl(False)
+
 
 main()
