@@ -12,7 +12,7 @@ Download the following three files:
 [CityEnviron.zip.003](https://github.com/microsoft/AirSim/releases/download/v1.4.0-windows/CityEnviron.zip.003) 
 
 If you've installed a program like [WinRar](https://www.rarlab.com/download.htm), you should be able to double-click
-on the CityEnviron.zip.001 to start the unzipping.  The clickable EXE file and support will be in a folder 
+on <b>CityEnviron.zip.001</b> to start the unzipping.  The clickable EXE file and support will be in a folder 
 <b>CityEnviron/WindowsNoEditor</b>.
 
 ## 2. Install Python packages
