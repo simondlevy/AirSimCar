@@ -1,7 +1,7 @@
 # AirSimCar
 Quickstart for driving the car in Microsoft AirSim
 
-# 1. Get the AirSim executable
+## 1. Get the AirSim executable
 
 Download the following three files:
 
@@ -10,7 +10,7 @@ Download the following three files:
 [CityEnviron.zip.003](https://github.com/microsoft/AirSim/releases/download/v1.4.0-windows/CityEnviron.zip.003) 
 
 
-# 2. Install Python packages
+## 2. Install Python packages
 
 
 ```
@@ -21,7 +21,7 @@ pip install airsim
 pip install opencv-python
 ```
 
-# 3. Drive!
+## 3. Drive!
 
 ```
 python hello_car.py
