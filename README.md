@@ -23,9 +23,11 @@ pip install airsim
 pip install opencv-python
 ```
 
-## 3. Drive!
+## 3. Clone and drive
 
 ```
+git clone https://github.com/simondlevy/AirSimCar
+cd AirSimCar
 python hello_car.py
 ```
 
